@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import pusher from 'pusher';
+import Pusher from 'pusher';
 import dbModel from './dbModel.js';
 
 //app config
@@ -26,8 +26,33 @@ mongoose.connect(connection_url, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true });
+
+
 mongoose.connection.once("open", () => {
     console.log("Db Connected");
+
+    const changeStream = mongoose.connection.collection('posts').watch();
+
+    changeStream.on('change', (change) => {
+
+        console.log("change triggered");
+        console.log(change);
+        console.log("end of change");
+
+        if (change.operationType === 'insert'){
+            console.log("triggering pusher ***Uploading Image***");
+            const postDetails = change.fullDocument;
+            pusher.trigger('posts', 'insertes', {
+                user: postDetails.user,
+                caption: postDetails.caption,
+                image: postDetails.image
+            })
+        }
+        else{
+            console.log("error triggering pusher");
+        }
+    })
+
 })
 
 //api routes
