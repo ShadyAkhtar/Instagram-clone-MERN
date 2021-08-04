@@ -9,6 +9,8 @@ import InstagramEmbed from "react-instagram-embed";
 import axios from './axios';
 import Pusher from 'pusher-js';
 
+
+
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -43,6 +45,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -215,8 +218,10 @@ function App() {
           </FlipMove>
         </div>
         <div className="app__postsRight">
+          
           <InstagramEmbed
             url="https://www.instagram.com/p/CDneH8tHHMw/"
+            clientAccessToken='666318934763457|05df7065c1b9a9bb502299803ef55081'
             maxWidth={320}
             hideCaption={false}
             containerTagName="div"
@@ -227,6 +232,8 @@ function App() {
             onAfterRender={() => {}}
             onFailure={() => {}}
           />
+
+          
         </div>
       </div>
 
